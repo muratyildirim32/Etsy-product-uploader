@@ -1,0 +1,46 @@
+import requests
+import json
+
+# Etsy API keys
+API_KEY = 'your_etsy_api_key'
+SHOP_ID = 'your_shop_id'
+
+# Function to add a product to Etsy
+def upload_product_to_etsy(title, description, price, quantity, tags, materials):
+    url = f'https://openapi.etsy.com/v3/application/shops/{SHOP_ID}/listings'
+    
+    headers = {
+        'x-api-key': API_KEY,
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer YOUR_ACCESS_TOKEN'  # Replace with an actual access token from OAuth2 authorization
+    }
+    
+    data = {
+        "title": title,
+        "description": description,
+        "price": price,
+        "quantity": quantity,
+        "tags": tags,
+        "materials": materials,
+        "who_made": "i_did",  # Example value for handmade item
+        "is_supply": False,
+        "when_made": "made_to_order",
+        "taxonomy_id": 500  # Category ID for the product
+    }
+
+    response = requests.post(url, headers=headers, data=json.dumps(data))
+
+    if response.status_code == 201:
+        print("Product successfully uploaded.")
+    else:
+        print(f"Error: {response.status_code} - {response.text}")
+
+# Example product details
+upload_product_to_etsy(
+    title="Sample Product",
+    description="This is a sample product description.",
+    price=25.99,
+    quantity=10,
+    tags=["sample", "handmade"],
+    materials=["cotton", "wood"]
+)
